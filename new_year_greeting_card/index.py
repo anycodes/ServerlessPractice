@@ -103,7 +103,7 @@ def main_handler(event, context):
         temp_base_pic.paste(frame_pic, (0, 0), frame_pic)
         temp_base_pic.paste(title_pic, (320, 30), title_pic)
         temp_base_pic.paste(temp_watermark_pic, (77, int((1348 - int(watermark_pic_new_y)) / 2)), temp_watermark_pic)
-        temp_base_pic.paste(get_qrcode(symbol_file),  (355, 970), get_qrcode(symbol_file))
+        temp_base_pic.paste(get_qrcode(symbol_file),  (340, 950), get_qrcode(symbol_file))
         draw = ImageDraw.Draw(temp_base_pic)
         draw.text((75, 300), get_input_str(to_str + ":", font, draw), (0, 0, 0), font=font)
         temp_data = get_input_str(input_str, font, draw, True)

@@ -24,7 +24,7 @@ for eve in os.listdir("./base/symbol_1"):
         temp_base_pic = Image.new('RGBA', (1200, 2200), (255, 255, 255))
         temp_pic = Image.open("./base/symbol_1/%s" % eve).convert("RGBA").resize((1200, 1800), Image.ANTIALIAS)
         temp_base_pic.paste(temp_pic, (0, 0), temp_pic)
-        url = "http://greetingcard.0duzhan.com/"
+        url = "http://serverless.0duzhan.com/app/new_year_greeting_card/"
         temp_base_pic.paste(get_qrcode(url), (475, 1800), get_qrcode(url))
         draw = ImageDraw.Draw(temp_base_pic)
         draw.text((455, 2100), "长按扫码制作贺卡", (0, 0, 0), font=ImageFont.truetype('./base/font/01.ttf', 40))
