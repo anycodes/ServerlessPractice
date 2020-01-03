@@ -1,0 +1,38 @@
+scf_2_serverless:
+  component: "@serverless/tencent-scf"
+  inputs:
+    name: myapi_scf_2_serverless
+    codeUri: ./
+    exclude:
+      - .gitignore
+      - .git/**
+      - .serverless
+      - .env
+    handler: index.main_handler
+    runtime: Python3.6
+    region: ap-beijing
+    description: Python3，下载依赖功能
+    memorySize: 128
+    timeout: 5
+    events:
+      - apigw:
+          name: serverless
+          parameters:
+            serviceId: service-8d3fi753
+            environment: release
+            endpoints:
+              - path: /scf_2_serverless/{serverless}
+                description: scf yaml转换serverless yaml
+                method: POST
+                enableCORS: true
+                param:
+                  - name: yaml
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: scf yaml
+                  - name: serverless
+                    position: PATH
+                    required: 'TRUE'
+                    type: string
+                    desc: serverless yaml类型

@@ -1,0 +1,33 @@
+get_user_ip:
+  component: "@serverless/tencent-scf"
+  inputs:
+    name: myapi_get_user_ip
+    codeUri: ./
+    exclude:
+      - .gitignore
+      - .git/**
+      - .serverless
+      - .env
+    handler: index.main_handler
+    runtime: Python3.6
+    region: ap-beijing
+    description: 获取用户的IP相关信息
+    memorySize: 64
+    timeout: 2
+    events:
+      - apigw:
+          name: serverless
+          parameters:
+            serviceId: service-8d3fi753
+            environment: release
+            endpoints:
+              - path: /get_user_ip
+                description: 获取用户的IP相关信息
+                method: POST
+                enableCORS: true
+                param:
+                  - name: ip
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: ip地址

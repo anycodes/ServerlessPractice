@@ -1,0 +1,38 @@
+new_year_add_photo_decorate:
+  component: "@serverless/tencent-scf"
+  inputs:
+    name: myapi_new_year_add_photo_decorate
+    codeUri: ./
+    exclude:
+      - .gitignore
+      - .git/**
+      - .serverless
+      - .env
+    handler: index.main_handler
+    runtime: Python3.6
+    region: ap-beijing
+    description: 新年为头像增加饰品
+    memorySize: 128
+    timeout: 5
+    events:
+      - apigw:
+          name: serverless
+          parameters:
+            serviceId: service-8d3fi753
+            environment: release
+            endpoints:
+              - path: /new_year_add_photo_decorate
+                description: 新年为头像增加饰品
+                method: POST
+                enableCORS: true
+                param:
+                  - name: pic
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: 原始图片
+                  - name: base
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: 饰品ID

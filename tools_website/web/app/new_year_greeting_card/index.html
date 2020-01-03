@@ -1,0 +1,325 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新年贺卡，全都鼠于你 - 自豪的采用腾讯云Serverless架构！</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="./css/mui.min.css">
+    <style type="text/css">
+        .slide-box {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-left: 10px;
+            margin-right: 10px;
+            display: -webkit-box;
+            overflow-x: scroll;
+            -webkit-overflow-scrolling: touch;
+        }
+        .slide-item {
+            width: 110px;
+            height: 190px;
+            margin-right: 7px;
+        }
+        .slide-item img {
+            height: 160px;
+        }
+    </style>
+    <script type="text/javascript">
+        function getChecked(obj) {
+            for (var i = 0; i < obj.length; i++) {
+                console.log(obj[i].checked)
+                if (obj[i].checked) {
+                    return obj[i].value;
+                }
+            }
+            return "1"
+        }
+        function getCard() {
+            document.getElementById("res").style = "display: block;";
+            document.getElementById("result").innerText = "系统处理中，请稍后..."
+            var xmlhttp;
+            if (window.XMLHttpRequest) {
+                // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                // IE6, IE5 浏览器执行代码
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    if (JSON.parse(xmlhttp.responseText)["error"]) {
+                        document.getElementById("result").innerText = JSON.parse(xmlhttp.responseText)["message"];
+                    } else {
+                        document.getElementById("result").innerText = "长按将贺卡发送给TA";
+                        document.getElementById("new_photo").src = "data:image/png;base64," + JSON.parse(xmlhttp.responseText)["message"]["picture"];
+                        document.getElementById("new_photo").style = "display: block;";
+                    }
+                }
+            }
+            var url = "http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/new_year_greeting_card"
+            obj = document.getElementsByName("title");
+            var frame = "1"
+            for (var i = 0; i < obj.length; i++) {
+                console.log(obj[i].checked)
+                if (obj[i].checked) {
+                    frame = obj[i].value;
+                }
+            }
+            xmlhttp.open("POST", url, true);
+            xmlhttp.setRequestHeader("Content-type", "application/json");
+            var postData = {
+                frame: getChecked(document.getElementsByName("frame")),
+                title: "1",
+                font: "02",
+                watermark: getChecked(document.getElementsByName("watermark")),
+                symbol: getChecked(document.getElementsByName("symbol")),
+                from: document.getElementById("from").value,
+                to: document.getElementById("to").value,
+                text: document.getElementById("text").value,
+            }
+            xmlhttp.send(JSON.stringify(postData));
+        }
+    </script>
+</head>
+<body>
+<h3 style="text-align: center; margin-top: 30px; margin-bottom: 20px">鼠于你的贺卡</h3>
+<div class="mui-card">
+    <div class="mui-card-content">
+        <div class="mui-card-content-inner">
+            第一步：选择一个框框
+        </div>
+        <div class="slide-box">
+            <div class="slide-item"><label><img src="./base/frame/1.png" width="100%">
+                <center><input type="radio" name="frame" value="1" checked></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/2.png" width="100%">
+                <center><input type="radio" name="frame" value="2"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/3.png" width="100%">
+                <center><input type="radio" name="frame" value="3"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/4.png" width="100%">
+                <center><input type="radio" name="frame" value="4"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/5.png" width="100%">
+                <center><input type="radio" name="frame" value="5"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/6.png" width="100%">
+                <center><input type="radio" name="frame" value="6"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/7.png" width="100%">
+                <center><input type="radio" name="frame" value="7"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/8.png" width="100%">
+                <center><input type="radio" name="frame" value="8"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/9.png" width="100%">
+                <center><input type="radio" name="frame" value="9"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/10.png" width="100%">
+                <center><input type="radio" name="frame" value="10"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/11.png" width="100%">
+                <center><input type="radio" name="frame" value="11"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/12.png" width="100%">
+                <center><input type="radio" name="frame" value="12"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/13.png" width="100%">
+                <center><input type="radio" name="frame" value="13"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/14.png" width="100%">
+                <center><input type="radio" name="frame" value="14"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/16.png" width="100%">
+                <center><input type="radio" name="frame" value="16"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/17.png" width="100%">
+                <center><input type="radio" name="frame" value="17"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/frame/18.png" width="100%">
+                <center><input type="radio" name="frame" value="18"></center>
+            </label></div>
+        </div>
+    </div>
+</div>
+
+<div class="mui-card">
+    <div class="mui-card-content">
+        <div class="mui-card-content-inner">
+            第二步：选择背景图
+        </div>
+        <div class="mui-content">
+            <ul class="mui-table-view mui-grid-view mui-grid-9">
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                    <img src="./base/others/1.png" width="100%"><input type="radio" name="watermark" value="1"
+                                                                       checked></label></li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                    <img src="./base/others/2.png" width="100%"><input type="radio" name="watermark" value="2"></label>
+                </li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                    <img src="./base/others/11.png" width="100%"><input type="radio" name="watermark"
+                                                                        value="11"></label>
+                </li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                    <img src="./base/others/4.png" width="100%"><input type="radio" name="watermark" value="4"></label>
+                </li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                    <img src="./base/others/5.png" width="100%"><input type="radio" name="watermark" value="5"></label>
+                </li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                    <img src="./base/others/6.png" width="100%"><input type="radio" name="watermark" value="6"></label>
+                </li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                    <img src="./base/others/12.png" width="100%"><input type="radio" name="watermark"
+                                                                        value="12"></label>
+                </li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                    <img src="./base/others/8.png" width="100%"><input type="radio" name="watermark" value="8"></label>
+                </li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                    <img src="./base/others/3.png" width="100%"><input type="radio" name="watermark" value="3"></label>
+                </li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                    <img src="./base/others/7.png" width="100%"><input type="radio" name="watermark" value="7"></label>
+                </li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                    <img src="./base/others/9.png" width="100%"><input type="radio" name="watermark" value="9"></label>
+                </li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                    <img src="./base/others/10.png" width="100%"><input type="radio" name="watermark"
+                                                                        value="10"></label>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="mui-card">
+    <div class="mui-card-content">
+        <div class="mui-card-content-inner">
+            第三步：选择一个"福"
+        </div>
+        <div class="slide-box">
+            <div class="slide-item"><label><img src="./base/symbol_1/1.png" width="100%">
+                <center><input type="radio" name="symbol" value="1" checked></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/2.png" width="100%">
+                <center><input type="radio" name="symbol" value="2"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/3.png" width="100%">
+                <center><input type="radio" name="symbol" value="3"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/4.png" width="100%">
+                <center><input type="radio" name="symbol" value="4"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/5.png" width="100%">
+                <center><input type="radio" name="symbol" value="5"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/6.png" width="100%">
+                <center><input type="radio" name="symbol" value="6"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/7.png" width="100%">
+                <center><input type="radio" name="symbol" value="7"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/8.png" width="100%">
+                <center><input type="radio" name="symbol" value="8"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/9.png" width="100%">
+                <center><input type="radio" name="symbol" value="9"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/10.png" width="100%">
+                <center><input type="radio" name="symbol" value="10"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/11.png" width="100%">
+                <center><input type="radio" name="symbol" value="11"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/12.png" width="100%">
+                <center><input type="radio" name="symbol" value="12"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/13.png" width="100%">
+                <center><input type="radio" name="symbol" value="13"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/14.png" width="100%">
+                <center><input type="radio" name="symbol" value="14"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/16.png" width="100%">
+                <center><input type="radio" name="symbol" value="16"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/17.png" width="100%">
+                <center><input type="radio" name="symbol" value="17"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/18.png" width="100%">
+                <center><input type="radio" name="symbol" value="18"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/19.png" width="100%">
+                <center><input type="radio" name="symbol" value="19"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/20.png" width="100%">
+                <center><input type="radio" name="symbol" value="20"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/21.png" width="100%">
+                <center><input type="radio" name="symbol" value="21"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/22.png" width="100%">
+                <center><input type="radio" name="symbol" value="22"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/23.png" width="100%">
+                <center><input type="radio" name="symbol" value="23"></center>
+            </label></div>
+            <div class="slide-item"><label><img src="./base/symbol_1/24.png" width="100%">
+                <center><input type="radio" name="symbol" value="24"></center>
+            </label></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="mui-card">
+    <div class="mui-card-content">
+        <div class="mui-card-content-inner">
+            最后一步：填写祝福语
+        </div>
+        <div class="mui-input-group">
+            <div class="mui-input-row">
+                <label>您的昵称</label>
+                <input type="text" placeholder="不超过20字符" name="from" id="from">
+            </div>
+            <div class="mui-input-row">
+                <label>对方昵称</label>
+                <input type="text" placeholder="不超过20字符" name="to" id="to">
+            </div>
+            <div class="mui-input-row" style="margin: 10px 5px;">
+                <textarea id="text" rows="5" placeholder="在此输入祝福语，不超过200字符" name="text"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="mui-content">
+    <div class="mui-content-padded">
+        <button type="button" class="mui-btn mui-btn-block mui-btn-primary" onclick="getCard()">确认</button>
+    </div>
+</div>
+
+
+<div class="mui-card" id="res" style="display: none;">
+    <div class="mui-card-content">
+        <div class="mui-card-content-inner">
+            <p id="result" style="text-align: center"></p>
+        </div>
+        <div class="mui-input-group">
+            <img id="new_photo" src="" width="100%" style="display: none;"/>
+        </div>
+    </div>
+</div>
+
+<p style="text-align: center">
+    本项目自豪的<br>通过Serverless Framework<br>搭建在腾讯云SCF上
+</p>
+</body>
+</html>

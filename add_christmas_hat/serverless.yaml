@@ -1,0 +1,33 @@
+add_christmas_hat:
+  component: "@serverless/tencent-scf"
+  inputs:
+    name: myapi_add_christmas_hat
+    codeUri: ./
+    exclude:
+      - .gitignore
+      - .git/**
+      - .serverless
+      - .env
+    handler: index.main_handler
+    runtime: Python3.6
+    region: ap-beijing
+    description: 圣诞节增加圣诞帽
+    memorySize: 128
+    timeout: 5
+    events:
+      - apigw:
+          name: serverless
+          parameters:
+            serviceId: service-8d3fi753
+            environment: release
+            endpoints:
+              - path: /add_christmas_hat
+                description: 圣诞节增加圣诞帽
+                method: POST
+                enableCORS: true
+                param:
+                  - name: pic
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: 原始图片

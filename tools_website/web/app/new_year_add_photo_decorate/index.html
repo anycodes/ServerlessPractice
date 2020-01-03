@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>2020头像大变样 - 头像SHOW - 自豪的采用腾讯云Serverless架构！</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #imgWrapper {
+            position: relative;
+            min-height: 400px;
+            background: #F1F1F1;
+            cursor: pointer;
+            text-align: center;
+            line-height: 0;
+        }
+
+        #imgWrapper:after {
+            display: inline-block;
+            content: '+ 点选择图片';
+            margin-top: 100px;
+            width: 80%;
+            max-width: 600px;
+            line-height: 200px;
+            color: #999;
+            border: 1px dashed #ccc;
+            border-radius: 10px;
+        }
+
+        #imgWrapper.hide:after {
+            display: none;
+        }
+
+        #imgWrapper .view-wrapper {
+            position: absolute;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #F1F1F1;
+        }
+
+        .view-wrapper img {
+            max-width: 100%;
+        }
+
+        /*#xxxxx {*/
+        /*position: fixed;*/
+        /*z-index: 100;*/
+        /*text-align: center;*/
+        /*width: 100%;*/
+        /*bottom: 80px;*/
+        /*color: aquamarine;*/
+        /*}*/
+    </style>
+    <script type="text/javascript">
+
+        thisPic = null
+
+        function getFileUrl(sourceId) {
+            var url;
+            thisPic = document.getElementById(sourceId).files.item(0)
+            if (navigator.userAgent.indexOf("MSIE") >= 1) { // IE
+                url = document.getElementById(sourceId).value;
+            } else {
+                url = window.URL.createObjectURL(document.getElementById(sourceId).files.item(0));
+            }
+            return url;
+        }
+
+        function preImg(sourceId, targetId) {
+            var url = getFileUrl(sourceId);
+            var imgPre = document.getElementById(targetId);
+            imgPre.src = url;
+            imgPre.style = "display: block;";
+        }
+
+        function clickChose() {
+            document.getElementById("imgOne").click()
+        }
+
+        function getNewPhoto() {
+            document.getElementById("result").innerText = "系统处理中，请稍后..."
+
+            document.getElementById("photo").src
+            var xmlhttp;
+            if (window.XMLHttpRequest) {
+                // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                // IE6, IE5 浏览器执行代码
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    if (JSON.parse(xmlhttp.responseText)["error"]) {
+                        document.getElementById("result").innerText = JSON.parse(xmlhttp.responseText)["message"];
+                    } else {
+                        document.getElementById("result").innerText = "长按保存图像";
+                        document.getElementById("new_photo").src = "data:image/png;base64," + JSON.parse(xmlhttp.responseText)["message"]["picture"];
+                        document.getElementById("new_photo").style = "display: block;";
+                    }
+                }
+            }
+
+            var url = " http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/new_year_add_photo_decorate"
+            var obj = document.getElementsByName("base");
+            var baseNum = "1"
+            for (var i = 0; i < obj.length; i++) {
+                console.log(obj[i].checked)
+                if (obj[i].checked) {
+                    baseNum = obj[i].value;
+                }
+            }
+            xmlhttp.open("POST", url, true);
+            xmlhttp.setRequestHeader("Content-type", "application/json");
+            var postData = {
+                pic: document.getElementById("photo").src,
+                base: baseNum
+            }
+            xmlhttp.send(JSON.stringify(postData));
+            // var oFReader = new FileReader();
+            // oFReader.readAsDataURL(thisPic);
+            // oFReader.onload = function (oFREvent) {
+            //     var xmlhttp;
+            //     if (window.XMLHttpRequest) {
+            //         // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+            //         xmlhttp = new XMLHttpRequest();
+            //     } else {
+            //         // IE6, IE5 浏览器执行代码
+            //         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            //     }
+            //     xmlhttp.onreadystatechange = function () {
+            //         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            //             if (JSON.parse(xmlhttp.responseText)["error"]) {
+            //                 document.getElementById("result").innerText = JSON.parse(xmlhttp.responseText)["message"];
+            //             } else {
+            //                 document.getElementById("result").innerText = "长按保存图像";
+            //                 document.getElementById("new_photo").src = "data:image/png;base64," + JSON.parse(xmlhttp.responseText)["message"]["picture"];
+            //                 document.getElementById("new_photo").style = "display: block;";
+            //             }
+            //         }
+            //     }
+            //
+            //     var url = " http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/new_year_add_photo_decorate"
+            //     var obj = document.getElementsByName("base");
+            //     var baseNum = "1"
+            //     for (var i = 0; i < obj.length; i++) {
+            //         console.log(obj[i].checked)
+            //         if (obj[i].checked) {
+            //             baseNum = obj[i].value;
+            //         }
+            //     }
+            //     xmlhttp.open("POST", url, true);
+            //     xmlhttp.setRequestHeader("Content-type", "application/json");
+            //     var postData = {
+            //         pic: oFREvent.target.result,
+            //         base: baseNum
+            //     }
+            //     xmlhttp.send(JSON.stringify(postData));
+            //
+            // }
+
+        }
+
+    </script>
+    <!--标准mui.css-->
+    <link rel="stylesheet" href="./css/mui.min.css">
+</head>
+<body>
+<h3 style="text-align: center; margin-top: 30px">2020头像SHOW</h3>
+<div class="mui-card">
+    <div class="mui-card-content">
+        <div class="mui-card-content-inner">
+            第一步：选择一个你喜欢的图片
+        </div>
+    </div>
+    <div class="mui-content">
+        <ul class="mui-table-view mui-grid-view mui-grid-9">
+            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                <img src="./base/1.png" width="100%"><input type="radio" name="base" value="1" checked></label></li>
+            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                <img src="./base/2.png" width="100%"><input type="radio" name="base" value="2"></label></li>
+            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                <img src="./base/11.png" width="100%"><input type="radio" name="base" value="11"></label></li>
+            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                <img src="./base/4.png" width="100%"><input type="radio" name="base" value="4"></label></li>
+            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                <img src="./base/5.png" width="100%"><input type="radio" name="base" value="5"></label></li>
+            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                <img src="./base/6.png" width="100%"><input type="radio" name="base" value="6"></label></li>
+            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                <img src="./base/12.png" width="100%"><input type="radio" name="base" value="12"></label></li>
+            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                <img src="./base/8.png" width="100%"><input type="radio" name="base" value="8"></label></li>
+            <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><label>
+                <img src="./base/3.png" width="100%"><input type="radio" name="base" value="3"></label></li>
+        </ul>
+    </div>
+</div>
+<div class="mui-card">
+    <div class="mui-card-content">
+        <div class="mui-card-content-inner">
+            第二步：上传一张你的头像
+        </div>
+        <div>
+            <div id="imgWrapper">
+                <div class="view-wrapper">
+                    <!--图片预览容器-->
+                    <img src="" style="display: none" id="photo">
+                </div>
+            </div>
+            <!--<form>-->
+            <!--<input type="file" name="imgOne" id="imgOne" onchange="preImg(this.id, 'photo')" style="display: none;"-->
+            <!--accept="image/*">-->
+            <!--<center style="margin-bottom: 10px">-->
+            <!--<input type="button" value="点击此处上传头像" onclick="clickChose()" style="margin-bottom: 10px"/>-->
+            <!--<img id="photo" src="" width="300px" , height="300px" style="display: none;"/>-->
+            <!--</center>-->
+            <!--</form>-->
+        </div>
+    </div>
+</div>
+
+<div class="mui-card">
+    <div class="mui-card-content">
+        <div class="mui-card-content-inner">
+            第三步：点击生成按钮获取新年头像
+        </div>
+        <div>
+            <center style="margin-bottom: 10px">
+                <input type="button" value="生成新年头像" onclick="getNewPhoto()"/>
+                <p id="result" style="margin-bottom: 10px; margin-top: 10px"></p>
+                <img id="new_photo" src="" width="300px" , height="300px" style="display: none;"/>
+            </center>
+        </div>
+    </div>
+</div>
+
+<p style="text-align: center">
+    本项目自豪的<br>通过Serverless Framework<br>搭建在腾讯云SCF上
+</p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-polyfills/0.1.42/polyfill.min.js"></script>
+<script src="./js/image-process-tools.min.js"></script>
+<script>
+    var imgWrapper = document.querySelector('#imgWrapper')
+    var img = imgWrapper.querySelector('img')
+    // var $xxxxx = document.getElementById('xxxxx')
+    // 初始化图片预处理工具
+    var zxImageProcess = new ZxImageProcess({
+        // 触发文件选择的元素
+        selector: '#imgWrapper',
+        // 限制宽度缩放，则只需设置width值
+        // 限制高度缩放，则只需设置height值
+        // 同时设置了width、height值，则会对图片按尺寸裁剪
+        width: 500,
+        height: 500,
+        submitText: 'submit',
+        rotateText: 'rotate 90',
+        success: function (result) {
+            // 返回数据
+            log(result);
+            // 添加图片至目标容器
+            img.src = result.base64;
+            img.style.display = '';
+            imgWrapper.className += ' hide';
+        },
+        error: function (err) {
+            console.error(err);
+            if (err.code === 9 || err.code === 22) return
+            alert(err.msg);
+        }
+    })
+    log(zxImageProcess)
+
+    // log
+    function log() {
+        console.log.apply(null, arguments);
+    }
+
+    function logStr(o) {
+        log(JSON.stringify(o, null, 2))
+    }
+</script>
+</body>
+</html>

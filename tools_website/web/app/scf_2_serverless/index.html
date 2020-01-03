@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SCF CLI Yaml转Serverless Yaml工具</title>
+    <script>
+
+        function loadXMLDoc() {
+            var UTFTranslate = {
+                Change: function (pValue) {
+                    return pValue.replace(/[^\u0000-\u00FF]/g, function ($0) {
+                        return escape($0).replace(/(%u)(\w{4})/gi, "&#x$2;")
+                    });
+                },
+                ReChange: function (pValue) {
+                    return unescape(pValue.replace(/&#x/g, '%u').replace(/\\u/g, '%u').replace(/;/g, ''));
+                }
+            };
+
+            var xmlhttp;
+            if (window.XMLHttpRequest) {
+                // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                // IE6, IE5 浏览器执行代码
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    document.getElementById("result").innerHTML = JSON.parse(xmlhttp.responseText)["result"];
+                }
+                if (serverlessType == 1) {
+                    document.getElementById("others").style = "display: block;";
+                }
+            }
+
+            var serverlessType = 1
+            var url = "http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/scf_2_serverless/plugin/"
+            var obj = document.getElementsByName("serverless");
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i].checked) {
+                    serverlessType = obj[i].value;
+                }
+            }
+            if (serverlessType == 2) {
+                url = "http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/scf_2_serverless/components/"
+            }
+
+            xmlhttp.open("POST", url, true);
+            xmlhttp.setRequestHeader("Content-type", "application/json");
+            var postData = {
+                yaml: document.getElementById("scf-yaml").value
+            }
+            xmlhttp.send(JSON.stringify(postData));
+        }
+    </script>
+</head>
+<body>
+
+<h1 style="text-align: center">SCF CLI/插件 Yaml 转换为 Serverless Yaml 工具</h1>
+<center>
+
+    <input type="radio" value="1" name="serverless">转Plugin Yaml
+    <input type="radio" value="2" name="serverless" checked="checked">转Component Yaml
+    <br><br>
+
+    <textarea id="scf-yaml" style="width: 95%; resize: none; height: 400px;"></textarea><br>
+    <p style="width: 95%;">* 如果无法识别老的Yaml可以把老的Yaml格式化一下，有问题联系QQ：80902630</p>
+    <button onclick="loadXMLDoc()">点击转换</button>
+    <br></center>
+    <pre id="result" style="width: 95%;text-align: left">提交并点击转换后将会在此处输出结果</pre>
+    <pre id="others" style="width: 95%;text-align: left; display: none;">请在项目目录下创建package.json文件，并填写以下内容:
+{
+  "name": "my-service",
+  "version": "0.1.0",
+  "description": "An example of Tencent Cloud Function using Serverless Framework.",
+  "scripts": {
+    "test": "echo \\"Error: no test specified\\" && exit 1"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "moment": "^2.18.1"
+  },
+  "devDependencies": {
+    "serverless-tencent-scf": "*"
+  }
+}</pre>
+
+
+</body>
+</html>

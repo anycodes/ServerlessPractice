@@ -1,0 +1,68 @@
+new_year_greeting_card:
+  component: "@serverless/tencent-scf"
+  inputs:
+    name: myapi_new_year_greeting_card
+    codeUri: ./
+    exclude:
+      - .gitignore
+      - .git/**
+      - .serverless
+      - .env
+    handler: index.main_handler
+    runtime: Python3.6
+    region: ap-beijing
+    description: 新年贺卡
+    memorySize: 256
+    timeout: 5
+    events:
+      - apigw:
+          name: serverless
+          parameters:
+            serviceId: service-8d3fi753
+            environment: release
+            endpoints:
+              - path: /new_year_greeting_card
+                description: 新年贺卡
+                method: POST
+                enableCORS: true
+                param:
+                  - name: from
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: 用户昵称
+                  - name: to
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: 被给予人昵称
+                  - name: frame
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: 框架图片
+                  - name: title
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: 标题图片
+                  - name: watermark
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: 水印图片
+                  - name: font
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: 字体
+                  - name: symbol
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: 符图
+                  - name: text
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: 正文

@@ -1,0 +1,11 @@
+tools_website:
+  component: '@serverless/tencent-website'
+  inputs:
+    code:
+      src: ./web
+      index: index.html
+      error: index.html
+    region: ap-beijing
+    bucketName: tools-website
+    hosts:
+      - host: serverless.0duzhan.com

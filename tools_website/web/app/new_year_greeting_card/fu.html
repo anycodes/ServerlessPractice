@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>鼠于你的福卡 - 自豪的采用腾讯云Serverless架构！</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+</head>
+<body>
+<h2 style="text-align: center">"鼠"于你的祝福</h2>
+<img src="" width="100%" id="pic">
+<script>
+    function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) {
+                return pair[1];
+            }
+        }
+        return (false);
+    }
+    url = "http://serverless.0duzhan.com/app/new_year_greeting_card/base/symbol/" + getQueryVariable("id") + ".png"
+    document.getElementById("pic").src = url
+</script>
+</body>
+</html>

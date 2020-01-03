@@ -1,0 +1,79 @@
+scf_python3_package_download:
+  component: "@serverless/tencent-scf"
+  inputs:
+    name: myapi_scf_python3_package_download
+    codeUri: ./
+    exclude:
+      - .gitignore
+      - .git/**
+      - .serverless
+      - .env
+    handler: index.main_handler
+    runtime: Python3.6
+    region: ap-beijing
+    description: Python3，下载依赖功能
+    memorySize: 640
+    timeout: 900
+    events:
+      - apigw:
+          name: serverless
+          parameters:
+            serviceId: service-8d3fi753
+            environment: release
+            endpoints:
+              - path: /scf_python3_package_download
+                description: Python3，下载依赖功能
+                method: POST
+                enableCORS: true
+                serviceTimeout: 899
+                param:
+                  - name: name
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: 依赖名称
+                  - name: version
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: 版本信息
+
+scf_python2_package_download:
+  component: "@serverless/tencent-scf"
+  inputs:
+    name: myapi_scf_python2_package_download
+    codeUri: ./
+    exclude:
+      - .gitignore
+      - .git/**
+      - .serverless
+      - .env
+    handler: index.main_handler
+    runtime: Python2.7
+    region: ap-beijing
+    description: Python2，下载依赖功能
+    memorySize: 640
+    timeout: 900
+    events:
+      - apigw:
+          name: serverless
+          parameters:
+            serviceId: service-8d3fi753
+            environment: release
+            endpoints:
+              - path: /scf_python2_package_download
+                description: Python2，下载依赖功能
+                method: POST
+                enableCORS: true
+                serviceTimeout: 899
+                param:
+                  - name: name
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: 依赖名称
+                  - name: version
+                    position: BODY
+                    required: 'FALSE'
+                    type: string
+                    desc: 版本信息

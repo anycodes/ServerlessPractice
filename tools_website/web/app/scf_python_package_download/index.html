@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Python Package Tool For Tencent Serverless Cloud Function</title>
+    <script>
+        function loadXMLDoc() {
+            document.getElementById("result").innerText = "系统处理中，请稍后..."
+            var UTFTranslate = {
+                Change: function (pValue) {
+                    return pValue.replace(/[^\u0000-\u00FF]/g, function ($0) {
+                        return escape($0).replace(/(%u)(\w{4})/gi, "&#x$2;")
+                    });
+                },
+                ReChange: function (pValue) {
+                    return unescape(pValue.replace(/&#x/g, '%u').replace(/\\u/g, '%u').replace(/;/g, ''));
+                }
+            };
+
+            var xmlhttp;
+            if (window.XMLHttpRequest) {
+                // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                // IE6, IE5 浏览器执行代码
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    if (JSON.parse(xmlhttp.responseText)["error"]) {
+                        document.getElementById("result").innerText = JSON.parse(xmlhttp.responseText)["result"];
+                    } else {
+                        document.getElementById("result").innerText = "点击下载压缩包";
+                        document.getElementById("result").href = JSON.parse(xmlhttp.responseText)["result"];
+                    }
+                }
+            }
+
+            var pythonVersion = 3
+            var url = "http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/scf_python3_package_download"
+            var obj = document.getElementsByName("python");
+            for (var i = 0; i < obj.length; i++) {
+                if (obj[i].checked) {
+                    pythonVersion = obj[i].value;
+                }
+            }
+            if (pythonVersion == 2) {
+                url = "http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/scf_python2_package_download"
+            }
+            xmlhttp.open("POST", url, true);
+            xmlhttp.setRequestHeader("Content-type", "application/json");
+            var postData = {
+                name: document.getElementById("name").value,
+                version: document.getElementById("version").value
+            }
+            xmlhttp.send(JSON.stringify(postData));
+        }
+    </script>
+</head>
+<body>
+
+<h1 style="text-align: center">Python Package Tool For Tencent Serverless Cloud Function</h1>
+<div style="text-align: center">
+    <input type="radio" value="2" name="python">Python2
+    <input type="radio" value="3" name="python" checked="checked">Python3
+    <br><br>
+    <input type="text" width="40%" placeholder="请输入Package名字" id="name">&nbsp;&nbsp;
+    <input type="text" width="40%" placeholder="请输入版本信息" id="version">&nbsp;&nbsp;
+    <button onclick="loadXMLDoc()">确定</button>
+    <br><br>
+    <a href="#" id="result"></a>
+</div>
+<p style="text-align: center">本项目自豪的<br>通过Serverless Framework<br>搭建在腾讯云SCF上</p>
+</body>
+</html>
