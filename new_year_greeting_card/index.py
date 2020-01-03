@@ -72,7 +72,7 @@ def main_handler(event, context):
         input_str = json_data["text"]
         from_str = json_data["from"]
         to_str = json_data["to"]
-        symbol_file = "http://greetingcard.0duzhan.com/fu.html?id=%s" % (json_data["symbol"])
+        symbol_file = "http://serverless.0duzhan.com/app/new_year_greeting_card/fu.html?id=%s" % (json_data["symbol"])
     except Exception as e:
         print(e)
         return return_msg(True, "参数获取失败")
