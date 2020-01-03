@@ -2,6 +2,7 @@
 
 ## 概述
 我的API是一系列有趣的或者实用API，这些API的共同点都是基于Serverless Framework来构造的。
+* 体验地址：http://serverless.0duzhan.com
 
 ## APIs
 
