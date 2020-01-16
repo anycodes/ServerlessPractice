@@ -12,6 +12,22 @@
 * [新年为头像加装饰](#新年为头像加装饰)
 * [圣诞节为头像戴圣诞帽](#圣诞节为头像戴圣诞帽)
 
+实践类文章地址
+
+* [【实践】基于Serverless的人工智能相册小程序](https://zhuanlan.zhihu.com/p/102935668)
+* [【实践】基于Serverless的图书查询APP的实现](https://zhuanlan.zhihu.com/p/101572333)
+* [新年到：Serverless帮你做贺卡](https://zhuanlan.zhihu.com/p/100872800)
+* [新年到：让Serverless给你头像加点装饰](https://zhuanlan.zhihu.com/p/100432264)
+* [我的API系列：获取用户IP和归属地运营商](https://zhuanlan.zhihu.com/p/100326243)
+* [我是如何为Serverless配置内存和超时时间的](https://zhuanlan.zhihu.com/p/100253577)
+* [腾讯云Serverless架构安装Python依赖的小工具（包括对外的API，基于SCF）](https://zhuanlan.zhihu.com/p/99890261)
+* [SCF CLI/VSCODE Yaml 快速转换为Serverless Plugin Yaml](https://zhuanlan.zhihu.com/p/99718289)
+* [SCFCLI/VSCODE插件Yaml快速转换为Serverless Components Yaml](https://zhuanlan.zhihu.com/p/99475957)
+* [圣诞节：让Serverless送你一顶圣诞帽](https://zhuanlan.zhihu.com/p/99275301)
+* [Serverless架构与资源评估：性能与成本探索](https://zhuanlan.zhihu.com/p/99130419)
+* [你好，Serverless Framework](https://zhuanlan.zhihu.com/p/98596244)
+* [Serverless: 你好，世界](https://zhuanlan.zhihu.com/p/95754819)
+
 ### 获取用户IP地址
 
 如果填写入参ip，会返回填写ip对应的信息，否则会返回客户端的ip相关信息。
