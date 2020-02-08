@@ -3,9 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <title>Python Package Tool For Tencent Serverless Cloud Function</title>
+    <link rel="stylesheet" type="text/css" href="dist/semantic.css">
+
+    <script src="dist/assets/library/jquery.min.js"></script>
+    <script src="dist/assets/library/iframe.js"></script>
+    <link rel="stylesheet" type="text/css" href="dist/components/reset.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/site.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/grid.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/icon.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/input.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/button.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/divider.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/label.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/dropdown.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/transition.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/popup.css">
+    <script src="dist/assets/library/jquery.min.js"></script>
+    <script src="dist/assets/library/iframe-content.js"></script>
+    <script type="text/javascript" src="dist/components/popup.js"></script>
+    <script type="text/javascript" src="dist/components/dropdown.js"></script>
+    <script type="text/javascript" src="dist/components/transition.js"></script>
+
+    <style type="text/css">
+        body > .ui.container {
+            margin-top: 3em;
+        }
+
+        iframe {
+            border: none;
+            width: calc(100% + 2em);
+            margin: 0em -1em;
+            height: 300px;
+        }
+
+        iframe html {
+            overflow: hidden;
+        }
+
+        iframe body {
+            padding: 0em;
+        }
+
+        .ui.container > h1 {
+            font-size: 3em;
+            text-align: center;
+            font-weight: normal;
+        }
+
+        #footer {
+            height: 100px;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+        }
+    </style>
+    <script>
+        $(document)
+            .ready(function () {
+                $('.ui.dropdown')
+                    .dropdown({
+                        on: 'click'
+                    })
+                ;
+            })
+        ;
+    </script>
     <script>
         function loadXMLDoc() {
-            document.getElementById("result").innerText = "系统处理中，请稍后..."
+            document.getElementById("result").style.display = "inline"
+            document.getElementById("info").style.display = "none"
             var UTFTranslate = {
                 Change: function (pValue) {
                     return pValue.replace(/[^\u0000-\u00FF]/g, function ($0) {
@@ -28,48 +94,96 @@
             xmlhttp.onreadystatechange = function () {
                 if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
                     if (JSON.parse(xmlhttp.responseText)["error"]) {
-                        document.getElementById("result").innerText = JSON.parse(xmlhttp.responseText)["result"];
+                        document.getElementById("result").style.display = "none"
+                        document.getElementById("info").style.display = "inline"
+                        document.getElementById("info").innerText = JSON.parse(xmlhttp.responseText)["result"]
                     } else {
-                        document.getElementById("result").innerText = "点击下载压缩包";
-                        document.getElementById("result").href = JSON.parse(xmlhttp.responseText)["result"];
+                        document.getElementById("result").className = "ui button"
+                        document.getElementById("result").innerText = "点击下载压缩包"
+                        document.getElementById("download").href = JSON.parse(xmlhttp.responseText)["result"]
+                        document.getElementById("result").style.display = "inline"
+                        document.getElementById("info").style.display = "none"
                     }
                 }
             }
 
-            var pythonVersion = 3
-            var url = "http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/scf_python3_package_download"
-            var obj = document.getElementsByName("python");
+            var url
+            var obj = document.getElementsByClassName("item");
             for (var i = 0; i < obj.length; i++) {
-                if (obj[i].checked) {
-                    pythonVersion = obj[i].value;
+                if (obj[i].className.indexOf("selected") != -1) {
+                    if (obj[i].innerHTML == "Python 3") {
+                        url = "http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/scf_python3_package_download"
+                        break
+                    }
+                    if (obj[i].innerHTML == "Python 2") {
+                        url = "http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/scf_python2_package_download"
+                        break
+                    }
                 }
             }
-            if (pythonVersion == 2) {
-                url = "http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/scf_python2_package_download"
+            if (!url) {
+                document.getElementById("result").style.display = "none"
+                document.getElementById("info").style.display = "inline"
+                document.getElementById("info").innerText = "请在上面的下来框中选择Runtime"
+            } else {
+                xmlhttp.open("POST", url, true);
+                xmlhttp.setRequestHeader("Content-type", "application/json");
+                var postData = {
+                    name: document.getElementById("name").value,
+                    version: document.getElementById("version").value
+                }
+                xmlhttp.send(JSON.stringify(postData));
             }
-            xmlhttp.open("POST", url, true);
-            xmlhttp.setRequestHeader("Content-type", "application/json");
-            var postData = {
-                name: document.getElementById("name").value,
-                version: document.getElementById("version").value
-            }
-            xmlhttp.send(JSON.stringify(postData));
         }
     </script>
 </head>
 <body>
 
-<h1 style="text-align: center">Python Package Tool For Tencent Serverless Cloud Function</h1>
-<div style="text-align: center">
-    <input type="radio" value="2" name="python">Python2
-    <input type="radio" value="3" name="python" checked="checked">Python3
+<div class="ui container">
+    <h1>Python Package Tool For Tencent Serverless Cloud Function</h1>
+    <br>
+
+    <center>
+        <div class="ui center labeled input">
+            <input placeholder="请输入包名" type="text" id="name">&nbsp;&nbsp;
+            <input placeholder="请输版本名" type="text" id="version">&nbsp;&nbsp;
+            <div class="ui dropdown label">
+                <div class="text">请选择Runtime</div>
+                <i class="dropdown icon"></i>
+                <div class="menu">
+                    <div class="item">Python 3</div>
+                    <div class="item">Python 2</div>
+                </div>
+            </div>&nbsp;&nbsp;
+            <button class="ui primary button" onclick="loadXMLDoc()">获取依赖</button>
+        </div>
+    </center>
+    <br>
+
+
+    <center>
+        <a href="" id="download">
+            <button class="ui loading button" style="display: none" id="result">Loading</button>
+        </a>
+        <h3 style="display: none" id="info"></h3>
+    </center>
+
     <br><br>
-    <input type="text" width="40%" placeholder="请输入Package名字" id="name">&nbsp;&nbsp;
-    <input type="text" width="40%" placeholder="请输入版本信息" id="version">&nbsp;&nbsp;
-    <button onclick="loadXMLDoc()">确定</button>
-    <br><br>
-    <a href="#" id="result"></a>
+    <div class="column">
+        <h2>使用说明</h2>
+        <p>本工具是通过Serverless Framework工具构建在腾讯云SCF上的Python依赖下载工具.</p>
+        <p><strong>工具背景： </strong>SCF的环境在CentOS + Python(3.6/2.7)，在Python项目中，我们通过PIP安装依赖可能会涉及到编译相关过程，可能会导致在非CentOS系统上下载的依赖上传到SCF中无法使用。</p>
+        <p><strong>解决问题： </strong>可以通过用户提交的包名和依赖名为用户在SCF的环境中打包相关依赖，用户可以下载依赖放入到自己项目中，并且使用。</p>
+        <p><strong>免责说明： </strong>本项目所提供的下载均为安装之后直接压缩并返回给用户的压缩包，不存在中间过程修改，但是本人并不能保证返回给您的依赖可用性以及安全性，本工具仅供测试使用，不代表官方行为，仅作为Serverless爱好者为您提供的工具，如果您在使用过程中出现任何问题，可以随时联系我QQ：80902630；出现任何问题，我会尽力协助解决，但是不会负责，请您慎重使用。</p>
+    </div>
+
 </div>
-<p style="text-align: center">本项目自豪的<br>通过Serverless Framework<br>搭建在腾讯云SCF上</p>
+
+<footer id="footer">
+    <center><p>本项目自豪的<br>
+        通过Serverless Framework<br>
+        搭建在腾讯云SCF上</p></center>
+</footer>
+
 </body>
 </html>
