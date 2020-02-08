@@ -100,7 +100,8 @@ def getBaseFunctionComponents(functionInformation, functionName=None, tempInputs
                                     tempEvent['ckafka']["parameters"] = tempParameter
 
                                 tempEvents.append(tempEvent)
-                    tempInputs["events"] = tempEvents
+                    if tempEvents:
+                        tempInputs["events"] = tempEvents
     return tempInputs
 
 
@@ -189,7 +190,8 @@ def getBaseFunctionPlugin(functionInformation, functionName=None, tempInputs=Non
                                     tempEvent = getEventPlugin("ckafka", eveEventKey, eveEventValue)
 
                                 tempEvents.append(tempEvent)
-                    tempInputs["events"] = tempEvents
+                    if tempEvents:
+                        tempInputs["events"] = tempEvents
     return tempInputs
 
 

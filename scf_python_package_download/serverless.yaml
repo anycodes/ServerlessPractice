@@ -10,9 +10,12 @@ scf_python3_package_download:
       - .env
     handler: index.main_handler
     runtime: Python3.6
+    environment:
+      variables:
+        python: python3
     region: ap-beijing
     description: Python3，下载依赖功能
-    memorySize: 640
+    memorySize: 1280
     timeout: 900
     events:
       - apigw:
@@ -50,6 +53,9 @@ scf_python2_package_download:
       - .env
     handler: index.main_handler
     runtime: Python2.7
+    environment:
+      variables:
+        python: python2
     region: ap-beijing
     description: Python2，下载依赖功能
     memorySize: 640

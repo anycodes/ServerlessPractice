@@ -1,7 +1,10 @@
-import pip._internal.main
+# -*- coding: utf8 -*-
+
 import json
-import os
+import shutil
 import zipfile
+import os
+import subprocess
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
 
@@ -14,6 +17,9 @@ config = CosConfig(Region=region, SecretId=secret_id, SecretKey=secret_key, Toke
 client = CosS3Client(config)
 bucket_name = 'serverless-cache-1256773370'
 
+scf_pip_path = "/tmp/scf_pip/"
+shutil.copytree(os.getcwd(), scf_pip_path)
+python_version = os.environ.get('python')
 
 def zipDir(dirpath, outFullName):
     """
@@ -51,7 +57,7 @@ def main_handler(event, context):
 
         response = client.list_objects(
             Bucket=bucket_name,
-            Prefix="python3_%s" % packageInfor
+            Prefix="%s_%s" % (python_version, packageInfor)
         )
 
         if 'Contents' in response and response['Contents'] and len(response['Contents']) > 0:
@@ -70,21 +76,34 @@ def main_handler(event, context):
         except:
             pass
         try:
-            install_list = ["install", packageInfor, "-t", "/tmp/%s" % (packageName), "-i",
-                            "http://pypi.doubanio.com/simple/", "--trusted-host", "pypi.doubanio.com"]
-            print(install_list)
-            pip._internal.main.main(install_list)
+
+            # pip_path = os.path.join(os.getcwd(), "pip/__main__.py")
+            pip_path = os.path.join(scf_pip_path, "pip/")
+            os.chdir(pip_path)
+
+            tpath = "/tmp/%s" % (packageName)
+            child = subprocess.Popen(
+                "python %s install %s -t %s -i http://pypi.doubanio.com/simple/  --trusted-host pypi.doubanio.com" % (
+                    "__main__.py", packageInfor, tpath), stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True,
+                shell=True)
+
+            error = child.stderr.read()
+            output = child.stdout.read()
+
+            print(error.decode("utf-8"))
+            print(output.decode("utf-8"))
+
             if os.listdir("/tmp/%s" % packageName):
                 zipDir("/tmp/%s" % packageName, "/tmp/%s.zip" % packageInfor)
                 response = client.upload_file(
                     Bucket=bucket_name,
                     LocalFilePath="/tmp/%s.zip" % packageInfor,
-                    Key="python3_%s.zip" % packageInfor,
+                    Key="%s_%s.zip" % (python_version, packageInfor),
                 )
                 print(response['ETag'])
                 response = client.get_presigned_download_url(
                     Bucket=bucket_name,
-                    Key="/python3_%s.zip" % packageInfor
+                    Key="/%s_%s.zip" % (python_version, packageInfor)
                 )
                 return {
                     "error": False,
