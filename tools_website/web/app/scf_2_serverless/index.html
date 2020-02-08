@@ -3,20 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <title>SCF CLI Yaml转Serverless Yaml工具</title>
+    <link rel="stylesheet" type="text/css" href="dist/semantic.css">
+
+    <script src="dist/assets/library/jquery.min.js"></script>
+    <script src="dist/assets/library/iframe.js"></script>
+    <link rel="stylesheet" type="text/css" href="dist/components/reset.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/site.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/grid.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/icon.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/input.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/button.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/divider.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/label.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/dropdown.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/transition.css">
+    <link rel="stylesheet" type="text/css" href="dist/components/popup.css">
+    <script src="dist/assets/library/jquery.min.js"></script>
+    <script src="dist/assets/library/iframe-content.js"></script>
+    <script type="text/javascript" src="dist/components/popup.js"></script>
+    <script type="text/javascript" src="dist/components/dropdown.js"></script>
+    <script type="text/javascript" src="dist/components/transition.js"></script>
+
+    <style type="text/css">
+        body > .ui.container {
+            margin-top: 3em;
+        }
+
+        iframe {
+            border: none;
+            width: calc(100% + 2em);
+            margin: 0em -1em;
+            height: 300px;
+        }
+
+        iframe html {
+            overflow: hidden;
+        }
+
+        iframe body {
+            padding: 0em;
+        }
+
+        .ui.container > h1 {
+            font-size: 3em;
+            text-align: center;
+            font-weight: normal;
+        }
+    </style>
+    <script>
+        $(document)
+            .ready(function () {
+                $('.ui.dropdown')
+                    .dropdown({
+                        on: 'click'
+                    })
+                ;
+            })
+        ;
+    </script>
     <script>
 
-        function loadXMLDoc() {
-            var UTFTranslate = {
-                Change: function (pValue) {
-                    return pValue.replace(/[^\u0000-\u00FF]/g, function ($0) {
-                        return escape($0).replace(/(%u)(\w{4})/gi, "&#x$2;")
-                    });
-                },
-                ReChange: function (pValue) {
-                    return unescape(pValue.replace(/&#x/g, '%u').replace(/\\u/g, '%u').replace(/;/g, ''));
-                }
-            };
-
+        function component() {
             var xmlhttp;
             if (window.XMLHttpRequest) {
                 // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
@@ -27,24 +74,13 @@
             }
             xmlhttp.onreadystatechange = function () {
                 if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                    document.getElementById("result").innerHTML = JSON.parse(xmlhttp.responseText)["result"];
-                }
-                if (serverlessType == 1) {
-                    document.getElementById("others").style = "display: block;";
+                    document.getElementById("result").style.display = "none"
+                    document.getElementById("component").style.display = "inline"
+                    document.getElementById("component-result").innerText = JSON.parse(xmlhttp.responseText)["result"]
                 }
             }
 
-            var serverlessType = 1
-            var url = "http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/scf_2_serverless/plugin/"
-            var obj = document.getElementsByName("serverless");
-            for (var i = 0; i < obj.length; i++) {
-                if (obj[i].checked) {
-                    serverlessType = obj[i].value;
-                }
-            }
-            if (serverlessType == 2) {
-                url = "http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/scf_2_serverless/components/"
-            }
+            var url = 'http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/scf_2_serverless/components/'
 
             xmlhttp.open("POST", url, true);
             xmlhttp.setRequestHeader("Content-type", "application/json");
@@ -52,25 +88,100 @@
                 yaml: document.getElementById("scf-yaml").value
             }
             xmlhttp.send(JSON.stringify(postData));
+
+        }
+
+        function plugin() {
+            var xmlhttp;
+            if (window.XMLHttpRequest) {
+                // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
+                xmlhttp = new XMLHttpRequest();
+            } else {
+                // IE6, IE5 浏览器执行代码
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    document.getElementById("result").style.display = "none"
+                    document.getElementById("plugin").style.display = "inline"
+                    document.getElementById("plugin-result").innerText = JSON.parse(xmlhttp.responseText)["result"]
+                    if (JSON.parse(xmlhttp.responseText)["error"]) {
+                        document.getElementById("package").style.display = "none"
+                    }else{
+                        document.getElementById("package").style.display = "inline"
+                    }
+                }
+            }
+
+            var url = 'http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/scf_2_serverless/plugin/'
+
+            xmlhttp.open("POST", url, true);
+            xmlhttp.setRequestHeader("Content-type", "application/json");
+            var postData = {
+                yaml: document.getElementById("scf-yaml").value
+            }
+            xmlhttp.send(JSON.stringify(postData));
+
+        }
+
+        function loadXMLDoc() {
+            document.getElementById("result").style.display = "inline"
+            component()
+            plugin()
+
         }
     </script>
 </head>
 <body>
 
-<h1 style="text-align: center">SCF CLI/插件 Yaml 转换为 Serverless Yaml 工具</h1>
-<center>
+<div class="ui container">
+    <h1>SCF CLI Yaml转Serverless Yaml工具</h1>
+    <br>
+    <textarea id="scf-yaml" style="width: 100%; resize: none; height: 400px;"></textarea><br>
+    <p>* 温馨提示：如果无法识别老的Yaml可以把老的Yaml格式化一下，有问题联系QQ：80902630</p>
+    <center>
+        <div class="ui center labeled input">
+            <button class="ui primary button" onclick="loadXMLDoc()">开始转换</button>
+        </div>
+    </center>
+    <br>
 
-    <input type="radio" value="1" name="serverless">转Plugin Yaml
-    <input type="radio" value="2" name="serverless" checked="checked">转Component Yaml
-    <br><br>
 
-    <textarea id="scf-yaml" style="width: 95%; resize: none; height: 400px;"></textarea><br>
-    <p style="width: 95%;">* 如果无法识别老的Yaml可以把老的Yaml格式化一下，有问题联系QQ：80902630</p>
-    <button onclick="loadXMLDoc()">点击转换</button>
-    <br></center>
-    <pre id="result" style="width: 95%;text-align: left">提交并点击转换后将会在此处输出结果</pre>
-    <pre id="others" style="width: 95%;text-align: left; display: none;">请在项目目录下创建package.json文件，并填写以下内容:
-{
+    <center>
+        <a href="" id="download">
+            <button class="ui loading button" style="display: none" id="result">Loading</button>
+        </a>
+    </center>
+
+
+    <div style="display: none" id="component">
+        <h2 class="ui dividing header">Component Yaml 结果</h2>
+        <div href="#" class="ui card" style="width: 100%">
+            <div class="content">
+                <div class="header">serverless.yaml</div>
+                <pre class="description" style="word-break:break-all;" id="component-result">
+
+            </pre>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div style="display: none" id="plugin">
+        <h2 class="ui dividing header">Component Plugin 结果</h2>
+        <div href="#" class="ui card" style="width: 100%">
+            <div class="content">
+                <div class="header">serverless.yaml</div>
+                <pre class="description" style="word-break:break-all;" id="plugin-result">
+
+            </pre>
+            </div>
+        </div>
+
+        <div id="package">
+            <div class="ui card" style="width: 100%;">
+                <div class="content">
+                    <div class="header">package.json</div>
+                    <pre class="description" style="word-break:break-all;">{
   "name": "my-service",
   "version": "0.1.0",
   "description": "An example of Tencent Cloud Function using Serverless Framework.",
@@ -85,7 +196,30 @@
     "serverless-tencent-scf": "*"
   }
 }</pre>
+                </div>
+            </div>
+        </div>
 
+    </div>
+
+    <br><br>
+
+    <div class="column">
+        <h2>使用说明</h2>
+        <p>本工具是通过Serverless Framework工具构建在腾讯云SCF上的yaml转换工具.</p>
+        <p><strong>工具背景： </strong>用户可能之前在用SCFCLI或者VSCode插件，但是他们的Yaml和Serverless的Yaml格式不一致，所以难以转换。</p>
+        <p><strong>解决问题： </strong>用户可以将SCFCLI或者VSCode插件使用的Yaml快速转换为Serverless Framework Plugin/Components Yaml。</p>
+        <p><strong>免责说明： </strong>本工具仅供测试使用，不代表官方行为，仅作为Serverless爱好者为您提供的工具，如果您在使用过程中出现任何问题，可以随时联系我QQ：80902630；出现任何问题，我会尽力协助解决，但是不会负责，请您慎重使用。
+        </p>
+    </div>
+
+</div>
+
+<footer id="footer">
+    <center><p>本项目自豪的<br>
+        通过Serverless Framework<br>
+        搭建在腾讯云SCF上</p></center>
+</footer>
 
 </body>
 </html>
