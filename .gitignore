@@ -13,7 +13,6 @@ testProjects/*/yarn.lock
 node_modules
 .vscode/
 .eslintcache
-dist
 .idea
 build/
 .env*
