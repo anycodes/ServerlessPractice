@@ -447,6 +447,7 @@ def unpack_url(
     if link.is_vcs:
         unpack_vcs_link(link, location)
 
+
     # file urls
     elif link.is_file:
         unpack_file_url(link, location, download_dir, hashes=hashes)
@@ -464,7 +465,6 @@ def unpack_url(
             hashes=hashes,
             progress_bar=progress_bar
         )
-
 
 def sanitize_content_filename(filename):
     # type: (str) -> str

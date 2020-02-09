@@ -108,10 +108,7 @@ class Command(CommandContextMixIn):
         # type: (List[str]) -> int
         
         options, args = self.parse_args(args)
-        print("--------")
-        print(options)
         options.cache_dir = "/tmp/.cache/pip"
-        print("--------")
 
         # Set verbosity so that it can be used elsewhere.
         self.verbosity = options.verbose - options.quiet

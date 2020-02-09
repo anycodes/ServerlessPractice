@@ -282,8 +282,6 @@ class InstallCommand(RequirementCommand):
         # type: (Values, List[Any]) -> int
         cmdoptions.check_install_build_global(options)
 
-        print(options)
-
         upgrade_strategy = "to-satisfy-only"
         if options.upgrade:
             upgrade_strategy = options.upgrade_strategy
@@ -364,6 +362,7 @@ class InstallCommand(RequirementCommand):
                     requirement_set, args, options, finder, session,
                     wheel_cache
                 )
+
                 preparer = self.make_requirement_preparer(
                     temp_build_dir=directory,
                     options=options,
@@ -382,6 +381,7 @@ class InstallCommand(RequirementCommand):
                     upgrade_strategy=upgrade_strategy,
                     use_pep517=options.use_pep517,
                 )
+
                 resolver.resolve(requirement_set)
 
                 try:

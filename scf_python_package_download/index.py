@@ -4,6 +4,7 @@ import json
 import shutil
 import zipfile
 import os
+import sys
 import subprocess
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
@@ -20,6 +21,7 @@ bucket_name = 'serverless-cache-1256773370'
 scf_pip_path = "/tmp/scf_pip/"
 shutil.copytree(os.getcwd(), scf_pip_path)
 python_version = os.environ.get('python')
+
 
 def zipDir(dirpath, outFullName):
     """
@@ -83,8 +85,9 @@ def main_handler(event, context):
 
             tpath = "/tmp/%s" % (packageName)
             child = subprocess.Popen(
-                "python %s install %s -t %s -i http://pypi.doubanio.com/simple/  --trusted-host pypi.doubanio.com" % (
-                    "__main__.py", packageInfor, tpath), stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True,
+                "%s %s install %s -t %s -i http://pypi.doubanio.com/simple/  --trusted-host pypi.doubanio.com" % (
+                sys.executable,
+                "__main__.py", packageInfor, tpath), stdout=subprocess.PIPE, stderr=subprocess.PIPE, close_fds=True,
                 shell=True)
 
             error = child.stderr.read()
@@ -112,7 +115,7 @@ def main_handler(event, context):
             else:
                 return {
                     "error": True,
-                    "result": "依赖安装失败"
+                    "result": error.decode("utf-8")
                 }
         except Exception as e:
             print(e)
