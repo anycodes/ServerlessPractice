@@ -1,0 +1,90 @@
+Conf:
+  component: "serverless-global"
+  inputs:
+    region: ap-beijing
+    runtime: Python3.6
+    role: SCF_UploadToCOSRole
+    bucket_name: scf-upload-1256773370
+
+UploadToCOSRole:
+  component: "@serverless/tencent-cam-role"
+  inputs:
+    roleName: ${Conf.role}
+    service:
+      - scf.qcloud.com
+    policy:
+      policyName:
+        - QcloudCOSFullAccess
+
+SCFUploadBucket:
+  component: '@gosls/tencent-cos'
+  inputs:
+    bucket: ${Conf.bucket_name}
+    region: ${Conf.region}
+    cors:
+      - id: abc
+        maxAgeSeconds: '10'
+        allowedMethods:
+          - POST
+          - PUT
+        allowedOrigins:
+          - '*'
+        allowedHeaders:
+          - '*'
+
+getUploadPresignedUrl:
+  component: "@gosls/tencent-scf"
+  inputs:
+    name: Upload_getUploadPresignedUrl
+    role: ${Conf.role}
+    codeUri: ./fileUploadToCos
+    handler: index.getPresignedUrl
+    runtime: ${Conf.runtime}
+    region: ${Conf.region}
+    description: 获取cos临时上传地址
+    memorySize: 64
+    timeout: 3
+    environment:
+      variables:
+        region: ${Conf.region}
+        bucket_name: ${Conf.bucket_name}
+
+uploadToSCFToCOS:
+  component: "@gosls/tencent-scf"
+  inputs:
+    name: Upload_uploadToSCFToCOS
+    role: ${Conf.role}
+    codeUri: ./fileUploadToCos
+    handler: index.uploadToScf
+    runtime: ${Conf.runtime}
+    region: ${Conf.region}
+    description: 通过上传到SCF再传到COS
+    memorySize: 128
+    timeout: 20
+    environment:
+      variables:
+        region: ${Conf.region}
+        bucket_name: ${Conf.bucket_name}
+
+UploadService:
+  component: "@gosls/tencent-apigateway"
+  inputs:
+    region: ${Conf.region}
+    protocols:
+      - http
+      - https
+    serviceName: UploadAPI
+    environment: release
+    endpoints:
+      - path: /upload/cos
+        description: 通过SCF上传cos
+        method: POST
+        enableCORS: TRUE
+        function:
+          functionName: Upload_uploadToSCFToCOS
+      - path: /upload/presigned
+        description: 获取临时地址
+        method: POST
+        enableCORS: TRUE
+        function:
+          functionName: Upload_getUploadPresignedUrl

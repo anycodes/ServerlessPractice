@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MyUpload For SCF</title>
+    <script>
+
+function doUpload(key, bodyUrl, bodySign, bodyToken) {
+    var fileObj = document.getElementById("fileCos").files[0];
+    xmlhttp = window.XMLHttpRequest ? (new XMLHttpRequest()) : (new ActiveXObject("Microsoft.XMLHTTP"));
+    xmlhttp.open("PUT", bodyUrl, true);
+    xmlhttp.onload = function () {
+        console.log(xmlhttp.responseText)
+        if (!xmlhttp.responseText) {
+            alert("上传成功")
+        }
+    };
+    xmlhttp.setRequestHeader("Authorization", bodySign);
+    xmlhttp.setRequestHeader("x-cos-security-token", bodyToken);
+    xmlhttp.send(fileObj);
+}
+
+function UpladFileCOS() {
+    const key = Math.random().toString(36).substr(2);
+
+    var xmlhttp = window.XMLHttpRequest ? (new XMLHttpRequest()) : (new ActiveXObject("Microsoft.XMLHTTP"))
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var body = JSON.parse(xmlhttp.responseText)
+            if (body['url']) {
+                doUpload(key, body['url'], body['sign'], body['token'])
+            }
+        }
+    }
+    var getUploadUrl = 'https://service-f1zk07f3-1256773370.bj.apigw.tencentcs.com/release/upload/presigned'
+    xmlhttp.open("POST", getUploadUrl, true);
+    xmlhttp.setRequestHeader("Content-type", "application/json");
+    xmlhttp.send(JSON.stringify({
+        token: 'mytoken',
+        key: key,
+    }));
+}
+
+function UpladFileSCF() {
+    var oFReader = new FileReader();
+    oFReader.readAsDataURL(document.getElementById("fileScf").files[0]);
+    oFReader.onload = function (oFREvent) {
+        const key = Math.random().toString(36).substr(2);
+        var xmlhttp = window.XMLHttpRequest ? (new XMLHttpRequest()) : (new ActiveXObject("Microsoft.XMLHTTP"))
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                if (JSON.parse(xmlhttp.responseText)['uploaded'] == 1) {
+                    alert("上传成功")
+                }
+            }
+        }
+        var url = " https://service-f1zk07f3-1256773370.bj.apigw.tencentcs.com/release/upload/cos"
+        xmlhttp.open("POST", url, true);
+        xmlhttp.setRequestHeader("Content-type", "application/json");
+        var postData = {
+            picture: oFREvent.target.result,
+            token: 'mytoken',
+            key: key,
+        }
+        xmlhttp.send(JSON.stringify(postData));
+    }
+
+}
+    </script>
+</head>
+<body>
+<center>
+    <div style="width: 70%">
+        <div style="text-align: center">
+            <h3>Web端上传文件</h3>
+        </div>
+        <hr>
+        <div>
+            <p>
+                方案1： 通过上传到SCF，进行处理再转存到COS，这种方法比较直观，但是问题是SCF从APIGW处只能接收到小于6M的数据，而且对二进制文件处理并不好。
+            </p>
+            <input type="file" name="file" id="fileScf"/>
+            <input type="button" onclick="UpladFileSCF()" value="上传"/>
+        </div>
+        <hr>
+        <div>
+            <p>
+                方案2：
+                直接上传到COS，流程是先从SCF获得临时地址，进行数据存储（例如将文件信息存到redis等），然后再从客户端进行上传COS，上传结束可通过COS触发器触发函数，从存储系统（例如已经存储到redis）读取到更对信息，在对图像进行处理。
+            </p>
+            <input type="file" name="file" id="fileCos"/>
+            <input type="button" onclick="UpladFileCOS()" value="上传"/>
+        </div>
+    </div>
+</center>
+</body>
+</html>
