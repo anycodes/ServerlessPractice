@@ -105,7 +105,7 @@ def getBaseFunctionComponents(functionInformation, functionName=None, tempInputs
     return tempInputs
 
 
-def getFunctionComponents(functionName, function, tempInputs):
+def getFunctionComponents(functionName, function, tempInputs, namespace):
     isFunction = False
     if isinstance(function, dict):
         for eveKey, eveValue in function.items():
@@ -117,6 +117,7 @@ def getFunctionComponents(functionName, function, tempInputs):
                     continue
                 else:
                     tempInputs = getBaseFunctionComponents(eveValue, functionName, tempInputs)
+                    tempInputs['namespace'] = namespace
                     serverlessPluginYaml = {
                         "component": '@serverless/tencent-scf',
                         "inputs": tempInputs
@@ -225,7 +226,7 @@ def doComponents(scfYaml):
                     tempInputs = inputs.copy()
                     if eveNamespaceKey == "Type" and eveNamespaceValue == "TencentCloud::Serverless::Namespace":
                         continue
-                    tempFunction = getFunctionComponents(eveNamespaceKey, eveNamespaceValue, tempInputs)
+                    tempFunction = getFunctionComponents(eveNamespaceKey, eveNamespaceValue, tempInputs, eveKey)
                     if tempFunction:
                         functions[eveNamespaceKey] = tempFunction
         return {
