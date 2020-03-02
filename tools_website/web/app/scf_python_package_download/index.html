@@ -70,6 +70,8 @@
     </script>
     <script>
         function loadXMLDoc() {
+            document.getElementById("result").className = "ui loading button"
+            document.getElementById("download").href = ""
             document.getElementById("result").style.display = "inline"
             document.getElementById("info").style.display = "none"
             var UTFTranslate = {

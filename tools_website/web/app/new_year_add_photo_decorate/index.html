@@ -125,48 +125,6 @@
                 base: baseNum
             }
             xmlhttp.send(JSON.stringify(postData));
-            // var oFReader = new FileReader();
-            // oFReader.readAsDataURL(thisPic);
-            // oFReader.onload = function (oFREvent) {
-            //     var xmlhttp;
-            //     if (window.XMLHttpRequest) {
-            //         // IE7+, Firefox, Chrome, Opera, Safari 浏览器执行代码
-            //         xmlhttp = new XMLHttpRequest();
-            //     } else {
-            //         // IE6, IE5 浏览器执行代码
-            //         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-            //     }
-            //     xmlhttp.onreadystatechange = function () {
-            //         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            //             if (JSON.parse(xmlhttp.responseText)["error"]) {
-            //                 document.getElementById("result").innerText = JSON.parse(xmlhttp.responseText)["message"];
-            //             } else {
-            //                 document.getElementById("result").innerText = "长按保存图像";
-            //                 document.getElementById("new_photo").src = "data:image/png;base64," + JSON.parse(xmlhttp.responseText)["message"]["picture"];
-            //                 document.getElementById("new_photo").style = "display: block;";
-            //             }
-            //         }
-            //     }
-            //
-            //     var url = " http://service-8d3fi753-1256773370.bj.apigw.tencentcs.com/release/new_year_add_photo_decorate"
-            //     var obj = document.getElementsByName("base");
-            //     var baseNum = "1"
-            //     for (var i = 0; i < obj.length; i++) {
-            //         console.log(obj[i].checked)
-            //         if (obj[i].checked) {
-            //             baseNum = obj[i].value;
-            //         }
-            //     }
-            //     xmlhttp.open("POST", url, true);
-            //     xmlhttp.setRequestHeader("Content-type", "application/json");
-            //     var postData = {
-            //         pic: oFREvent.target.result,
-            //         base: baseNum
-            //     }
-            //     xmlhttp.send(JSON.stringify(postData));
-            //
-            // }
-
         }
 
     </script>

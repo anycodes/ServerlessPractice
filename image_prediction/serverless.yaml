@@ -1,0 +1,24 @@
+imageDemo:
+  component: "@serverless/tencent-scf"
+  inputs:
+    name: imageDemo
+    codeUri: ./
+    handler: index.main_handler
+    runtime: Python3.6
+    region: ap-beijing
+    description: 图像识别/分类Demo
+    memorySize: 256
+    timeout: 10
+    events:
+      - apigw:
+          name: imageDemo_apigw_service
+          parameters:
+            protocols:
+              - http
+            serviceName: serverless
+            serviceId: service-8d3fi753
+            description: 图像识别/分类DemoAPI
+            environment: release
+            endpoints:
+              - path: /image_prediction
+                method: ANY

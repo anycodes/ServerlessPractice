@@ -11,22 +11,36 @@
 * [获取用户IP地址](#获取用户IP地址)
 * [新年为头像加装饰](#新年为头像加装饰)
 * [圣诞节为头像戴圣诞帽](#圣诞节为头像戴圣诞帽)
+* [图像内容识别](#图像内容识别)
 
 实践类文章地址
 
-* [【实践】基于Serverless的人工智能相册小程序](https://zhuanlan.zhihu.com/p/102935668)
-* [【实践】基于Serverless的图书查询APP的实现](https://zhuanlan.zhihu.com/p/101572333)
-* [新年到：Serverless帮你做贺卡](https://zhuanlan.zhihu.com/p/100872800)
-* [新年到：让Serverless给你头像加点装饰](https://zhuanlan.zhihu.com/p/100432264)
-* [我的API系列：获取用户IP和归属地运营商](https://zhuanlan.zhihu.com/p/100326243)
-* [我是如何为Serverless配置内存和超时时间的](https://zhuanlan.zhihu.com/p/100253577)
-* [腾讯云Serverless架构安装Python依赖的小工具（包括对外的API，基于SCF）](https://zhuanlan.zhihu.com/p/99890261)
-* [SCF CLI/VSCODE Yaml 快速转换为Serverless Plugin Yaml](https://zhuanlan.zhihu.com/p/99718289)
-* [SCFCLI/VSCODE插件Yaml快速转换为Serverless Components Yaml](https://zhuanlan.zhihu.com/p/99475957)
-* [圣诞节：让Serverless送你一顶圣诞帽](https://zhuanlan.zhihu.com/p/99275301)
-* [Serverless架构与资源评估：性能与成本探索](https://zhuanlan.zhihu.com/p/99130419)
-* [你好，Serverless Framework](https://zhuanlan.zhihu.com/p/98596244)
-* [Serverless: 你好，世界](https://zhuanlan.zhihu.com/p/95754819)
+* [20行代码：Serverless架构下用Python轻松搞定图像分类](https://zhuanlan.zhihu.com/p/110339482)
+* [如何在Serverless上部署SCFCLI/VSCode插件生成的项目](https://zhuanlan.zhihu.com/p/110155146)
+* [ServerlessComponent：全局变量组件和单独部署方法](https://zhuanlan.zhihu.com/p/110071590)
+* [Serverless架构的无状态性究竟是什么](https://zhuanlan.zhihu.com/p/110071540)
+* [用Serverless怎么实现文件上传（附代码）](https://zhuanlan.zhihu.com/p/110071452)
+* [传统的Web框架如何部署在Serverless架构上（以Flask为例）](https://zhuanlan.zhihu.com/p/110071391)
+* [Serverless架构下Python语言实现一个基于人工智能的相册小程序](https://zhuanlan.zhihu.com/p/110071256)
+* [【公众号开发】用Serverless快速上手微信公众号开发](https://zhuanlan.zhihu.com/p/110070824)
+* [【公众号开发】人工智能让我们的公众号活起来](https://zhuanlan.zhihu.com/p/110070755)
+* [Serverless架构与资源评估：性能与成本探索帽](https://zhuanlan.zhihu.com/p/110070567)
+* [我是如何为Serverless配置内存和超时时间的](https://zhuanlan.zhihu.com/p/110070487)
+* [Serverless架构如何获取用户IP和归属地运营商](https://zhuanlan.zhihu.com/p/110070407)
+* [传统的Web框架如何部署在Serverless架构上（以Flask为例）](https://zhuanlan.zhihu.com/p/110070046)
+* [从SCFCLI/SCF VSCode迁移过渡到Serverless Framework](https://zhuanlan.zhihu.com/p/109926801)
+* [如何为Serverless架构做了一个Django的Component](https://zhuanlan.zhihu.com/p/109926704)
+* [用腾讯云Serverless你要知道他们两个的区别](https://zhuanlan.zhihu.com/p/109926610)
+* [基于Serverless的图书查询APP的实现](https://zhuanlan.zhihu.com/p/109926497)
+* [云计算：Serverless Framework与Serverless CLI](https://zhuanlan.zhihu.com/p/109926315)
+* [你好，Serverless Framework](https://zhuanlan.zhihu.com/p/109926172)
+* [Serverless: 你好，世界](https://zhuanlan.zhihu.com/p/109925923)
+* [圣诞节：让Serverless送你一顶圣诞帽](https://zhuanlan.zhihu.com/p/109925775)
+* [新年到：Serverless帮你做贺卡](https://zhuanlan.zhihu.com/p/109925609)
+* [新年到：让Serverless给你头像加点装饰](https://zhuanlan.zhihu.com/p/109925202)
+* [基于Serverless架构的Python Blog开发(原生开发与Flask框架结合)](https://zhuanlan.zhihu.com/p/109886060)
+* [【公众号开发】用Serverless实现公众号图文搜索功能](https://zhuanlan.zhihu.com/p/109843939)
+
 
 ### 获取用户IP地址
 
@@ -96,6 +110,34 @@ base对应关系 [文件名就是编号](/new_year_add_photo_decorate/base)
     "error": false,
     "message": {
         "picture": "生成后图像的base64编码"
+    }
+}
+```
+
+### 图像内容识别
+
+接口路径：/image_prediction
+
+入参：
+
+| 参数 | 必选 | 类型 |  描述 |
+| ---- | ---- | ------ | ---- | 
+| pic | 是 | String | 图片base64 |
+
+出参格式：
+
+```text
+{
+    "uuid": "9df88d10-2bbe-11ea-ad59-0242cb007102",
+    "error": false,
+    "message": {
+        {
+            "cheetah": 83.12643766403198, 
+            "Irish_terrier": 2.315458096563816, 
+            "lion": 1.8476998433470726, 
+            "teddy": 1.6655176877975464, 
+            "baboon": 1.5562783926725388
+        }
     }
 }
 ```
